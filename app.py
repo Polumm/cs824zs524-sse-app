@@ -80,5 +80,12 @@ def reset_game():
     return jsonify(game_state)
 
 
+@app.route("/submit", methods=["POST"])
+def submit():
+    input_name = request.form.get("name")
+    input_age = request.form.get("age")
+    return render_template("hello.html", name=input_name, age=input_age)
+
+
 if __name__ == "__main__":
     app.run(debug=True, port=5005)

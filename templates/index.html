@@ -89,7 +89,7 @@
           <button class="left" onclick="leftButtonClicked()">&larr;</button>
           <button class="right" onclick="rightButtonClicked()">&rarr;</button>
         </div>
-        <button class="down" onclick="downButtonClicked()">&darr;</button>        
+        <button class="down" onclick="downButtonClicked()">&darr;</button>
       </div>
     </div>
 
@@ -99,5 +99,13 @@
     </div>
 
     <script src="{{ url_for('static', filename='app.js') }}"></script>
+
+    <form action="/submit" method="post">
+      <label for="namefield">Name:</label>
+      <input type="text" id="namefield" name="name" />
+      <label for="agefield">Age:</label>
+      <input type="number" id="agefield" name="age" />
+      <input type="submit" value="Submit" />
+    </form>
   </body>
 </html>
