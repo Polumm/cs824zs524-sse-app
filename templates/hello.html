@@ -1,10 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hello</title>
+    <!-- Meta tag for automatic redirect after 5 seconds -->
+    <meta http-equiv="refresh" content="5;url=/" />
+    <style>
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            background-color: #333;
+            color: white;
+            padding-top: 50px;
+        }
+    </style>
+</head>
 <body>
-  <h1>Hello {{ name }}!</h1>
-  <p>Name: {{ name }}</p>
-  <p>Age: {{ age }}</p>
-  <p>
-    You may wonder what this page has to do with the snake. The answer is no, it
-    has nothing to do with the snake, but we are asked to put it here by the
-    spec.
-  </p>
+    <h1>Hello {{ name }}!</h1>
+    <p>Name: {{ name }}</p>
+    <p>Age: {{ age }}</p>
+    <p>
+        You may wonder what this page has to do with the snake. The answer is no, it
+        has nothing to do with the snake, but we are asked to put it here by the
+        spec.
+    </p>
+    <p>Returning to the game in 5 seconds...</p>
+
+    <!-- Optional JavaScript redirect after 5 seconds -->
+    <script>
+        setTimeout(function() {
+            window.location.href = "/";
+        }, 5000);  // 5 seconds
+    </script>
 </body>
+</html>
