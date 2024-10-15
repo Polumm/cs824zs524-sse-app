@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake Game</title>
+    <style>
+        canvas {
+            background-color: black;
+            display: block;
+            margin: 0 auto;
+        }
+        body {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            color: white;
+        }
+        #game-over {
+            color: red;
+            font-size: 24px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Snake Game</h1>
+    <p>Score: <span id="score">0</span></p>
+    <p id="game-over">Game Over! Press R to restart.</p>
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
