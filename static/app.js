@@ -21,13 +21,13 @@ function updateGame() {
         },
         body: JSON.stringify({ direction }),
     })
-    .then((response) => response.json())
-    .then((data) => {
-        drawGame(data.snake, data.food, data.score);
-        if (data.game_over) {
-            document.getElementById("game-over").style.display = "block";
-        }
-    });
+        .then((response) => response.json())
+        .then((data) => {
+            drawGame(data.snake, data.food, data.score);
+            if (data.game_over) {
+                document.getElementById("game-over").style.display = "block";
+            }
+        });
 }
 
 function drawGame(snake, food, score) {
@@ -56,11 +56,27 @@ function resetGame() {
             "Content-Type": "application/json",
         },
     })
-    .then((response) => response.json())
-    .then(() => {
-        document.getElementById("game-over").style.display = "none";
-        direction = "Right";
-    });
+        .then((response) => response.json())
+        .then(() => {
+            document.getElementById("game-over").style.display = "none";
+            direction = "Right";
+        });
+}
+
+function upButtonClicked() {
+    direction = "Up";
+}
+
+function downButtonClicked() {
+    direction = "Down";
+}
+
+function leftButtonClicked() {
+    direction = "Left";
+}
+
+function rightButtonClicked() {
+    direction = "Right";
 }
 
 // Update the game every 100ms
