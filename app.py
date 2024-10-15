@@ -1,6 +1,8 @@
 from flask import Flask, jsonify, render_template, request
 import random
 
+from utils import are_opposite_directions
+
 app = Flask(__name__)
 
 # Snake game state management
@@ -59,7 +61,9 @@ def move():
         return jsonify(game_state)  # Don't allow moves when the game is over
 
     data = request.json
-    game_state["direction"] = data.get("direction", game_state["direction"])
+    direction = data.get("direction", game_state["direction"])
+    if not are_opposite_directions(direction, game_state["direction"]):
+        game_state["direction"] = direction
     move_snake()
     check_collisions()
     check_food()
