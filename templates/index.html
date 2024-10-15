@@ -5,20 +5,73 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Snake Game</title>
     <style>
+      /* Game canvas styling */
       canvas {
         background-color: black;
         display: block;
-        margin: 0 auto;
+        margin: 20px auto; /* Add margin to space it nicely */
       }
+
+      /* General body and font styling */
       body {
         text-align: center;
         font-family: Arial, sans-serif;
         color: white;
+        background-color: #333; /* Darker background for contrast */
+        margin: 0;
+        padding: 0;
       }
+
+      /* Game over text styling */
       #game-over {
         color: red;
         font-size: 24px;
         display: none;
+      }
+
+      /* Control buttons container */
+      .controls {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
+      }
+
+      /* Control buttons arranged in a flex column for up-down */
+      .control-buttons {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+
+      /* Middle row for left-right */
+      .middle {
+        display: flex;
+        justify-content: space-between;
+        width: 160px; /* Adjust width for space between LEFT and RIGHT buttons */
+      }
+
+      /* Button styling */
+      .controls button {
+        padding: 10px 20px;
+        margin: 5px;
+        font-size: 18px;
+        background-color: #555;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      /* Button hover effect */
+      .controls button:hover {
+        background-color: #777;
+      }
+
+      /* Reset button with distinct styling */
+      .reset {
+        background-color: #ff4444;
       }
     </style>
   </head>
@@ -28,12 +81,23 @@
     <p id="game-over">Game Over! Press R to restart.</p>
     <canvas id="gameCanvas" width="400" height="400"></canvas>
 
-    <script src="{{ url_for('static', filename='app.js') }}"></script>
+    <!-- Control buttons arranged in a cross-like pattern -->
+    <div class="controls">
+      <div class="control-buttons">
+        <button class="up" onclick="upButtonClicked()">&uarr;</button>
+        <div class="middle">
+          <button class="left" onclick="leftButtonClicked()">&larr;</button>
+          <button class="right" onclick="rightButtonClicked()">&rarr;</button>
+        </div>
+        <button class="down" onclick="downButtonClicked()">&darr;</button>        
+      </div>
+    </div>
 
-    <button onclick="upButtonClicked()">UP</button>
-    <button onclick="downButtonClicked()">DOWN</button>
-    <button onclick="leftButtonClicked()">LEFT</button>
-    <button onclick="rightButtonClicked()">RIGHT</button>
-    <button onclick="resetGame()">RESET</button>
+    <!-- Reset button -->
+    <div class="controls">
+      <button class="reset" onclick="resetGame()">RESET</button>
+    </div>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
   </body>
 </html>
