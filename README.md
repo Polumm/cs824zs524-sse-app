@@ -6,6 +6,8 @@ This project was created for the **70085 Software Systems Engineering** course a
 
 This is a simple **Snake Game** web application built using **Flask** for the backend and **JavaScript** for the frontend. The goal of this project is to provide a fun, interactive game, while exploring core web development concepts like routing, form submission, and using API endpoints.
 
+**Do be careful, this is a tricky snake**: In **impaas**, the snake will sometimes go down 1 block when you go left or right to disturb you (the player). This is part of the game's challenge to test your reflexes!
+
 ## Game Controls
 
 - **Keyboard**:

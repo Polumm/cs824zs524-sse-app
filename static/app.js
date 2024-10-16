@@ -15,15 +15,41 @@ promptMessage.style.transform = "translate(-50%, -50%)";
 promptMessage.style.display = "block";  // Show the prompt at the very beginning
 document.body.appendChild(promptMessage);
 
+// Prevent window resizing
+window.addEventListener('resize', function(event) {
+    event.preventDefault();  // Prevent any resize actions
+    window.resizeTo(400, 400);  // Optional: Fixed size, adjust to your desired size
+});
+
+// Prevent default arrow key behavior (scrolling)
+window.addEventListener("keydown", function(event) {
+    // If the arrow keys are pressed, prevent scrolling
+    if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(event.key)) {
+        event.preventDefault();
+    }
+});
+
 // Listen for key presses to change direction and start the game
 document.addEventListener("keydown", (event) => {
     const key = event.key;
     gameStarted = true;  // Start game on key press
     promptMessage.style.display = "none";  // Hide the prompt when the game starts
-    if (key === "ArrowUp" && direction !== "Down") direction = "Up";  // Prevent reversing direction
-    if (key === "ArrowDown" && direction !== "Up") direction = "Down";
-    if (key === "ArrowLeft" && direction !== "Right") direction = "Left";
-    if (key === "ArrowRight" && direction !== "Left") direction = "Right";
+
+    // Improve key handling to prevent unintended direction changes
+    if (key === "ArrowUp" && direction !== "Down") {
+        direction = "Up";
+    } 
+    if (key === "ArrowDown" && direction !== "Up") {
+        direction = "Down";
+    } 
+    if (key === "ArrowLeft" && direction !== "Right") {
+        direction = "Left";
+    } 
+    if (key === "ArrowRight" && direction !== "Left") {
+        direction = "Right";
+    }
+
+    // Handle reset game when 'R' is pressed
     if (key === "r" || key === "R") resetGame();
 });
 
