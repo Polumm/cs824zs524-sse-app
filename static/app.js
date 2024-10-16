@@ -1,18 +1,35 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
-let direction = "Right";
+let direction = null;  // Initially, snake won't move until a key is pressed
+let gameStarted = false;
 
-// Listen for key presses to change direction
+// Show the "Press any key to start" prompt
+const promptMessage = document.createElement("div");
+promptMessage.innerHTML = "Press any direction key to start";
+promptMessage.style.color = "white";
+promptMessage.style.fontSize = "24px";
+promptMessage.style.position = "absolute";
+promptMessage.style.top = "50%";
+promptMessage.style.left = "50%";
+promptMessage.style.transform = "translate(-50%, -50%)";
+promptMessage.style.display = "block";  // Show the prompt at the very beginning
+document.body.appendChild(promptMessage);
+
+// Listen for key presses to change direction and start the game
 document.addEventListener("keydown", (event) => {
     const key = event.key;
-    if (key === "ArrowUp") direction = "Up";
-    if (key === "ArrowDown") direction = "Down";
-    if (key === "ArrowLeft") direction = "Left";
-    if (key === "ArrowRight") direction = "Right";
+    gameStarted = true;  // Start game on key press
+    promptMessage.style.display = "none";  // Hide the prompt when the game starts
+    if (key === "ArrowUp" && direction !== "Down") direction = "Up";  // Prevent reversing direction
+    if (key === "ArrowDown" && direction !== "Up") direction = "Down";
+    if (key === "ArrowLeft" && direction !== "Right") direction = "Left";
+    if (key === "ArrowRight" && direction !== "Left") direction = "Right";
     if (key === "r" || key === "R") resetGame();
 });
 
 function updateGame() {
+    if (!gameStarted || !direction) return;  // Don't update if the game hasn't started or no direction is set
+
     // Send current direction to server
     fetch("/move", {
         method: "POST",
@@ -26,6 +43,7 @@ function updateGame() {
             drawGame(data.snake, data.food, data.score);
             if (data.game_over) {
                 document.getElementById("game-over").style.display = "block";
+                gameStarted = false;  // Stop the game if it's over
             }
         });
 }
@@ -59,24 +77,36 @@ function resetGame() {
         .then((response) => response.json())
         .then(() => {
             document.getElementById("game-over").style.display = "none";
-            direction = "Right";
+            direction = null;  // Reset direction so the snake doesn't move until a key is pressed
+            gameStarted = false;  // Reset the game state
+            promptMessage.style.display = "block";  // Show the prompt message after reset
+            promptMessage.innerHTML = "Press any direction key to start";  // Re-show the start message
         });
 }
 
+// Button event listeners for on-screen controls
 function upButtonClicked() {
-    direction = "Up";
+    if (direction !== "Down") direction = "Up";
+    gameStarted = true;
+    promptMessage.style.display = "none";
 }
 
 function downButtonClicked() {
-    direction = "Down";
+    if (direction !== "Up") direction = "Down";
+    gameStarted = true;
+    promptMessage.style.display = "none";
 }
 
 function leftButtonClicked() {
-    direction = "Left";
+    if (direction !== "Right") direction = "Left";
+    gameStarted = true;
+    promptMessage.style.display = "none";
 }
 
 function rightButtonClicked() {
-    direction = "Right";
+    if (direction !== "Left") direction = "Right";
+    gameStarted = true;
+    promptMessage.style.display = "none";
 }
 
 // Update the game every 100ms
