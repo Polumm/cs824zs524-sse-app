@@ -93,12 +93,22 @@ def submit():
     return render_template("hello.html", name=input_name, age=input_age)
 
 
-# app.py
 def process_query(query):
     if query == "dinosaurs":
         return "Dinosaurs ruled the Earth 200 million years ago"
+    elif query == "asteroids":
+        return "Asteroids are rocky bodies orbiting the Sun"
     else:
         return "Unknown"
+
+
+@app.route("/query")
+def query_route():
+    query_param = request.args.get("q")
+    if query_param:
+        return process_query(query_param)
+    else:
+        return "Query parameter missing", 400
 
 
 if __name__ == "__main__":
