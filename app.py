@@ -41,7 +41,10 @@ def check_collisions():
 def check_food():
     if game_state["snake"][0] == tuple(game_state["food"]):
         game_state["snake"].append(game_state["snake"][-1])
-        game_state["food"] = [random.randint(0, 39) * 10, random.randint(0, 39) * 10]
+        game_state["food"] = [
+            random.randint(0, 39) * 10,
+            random.randint(0, 39) * 10,
+        ]
         game_state["score"] += 10
 
 
@@ -74,7 +77,10 @@ def move():
 def reset_game():
     game_state["snake"] = [(100, 100), (90, 100), (80, 100)]
     game_state["direction"] = "Right"
-    game_state["food"] = [random.randint(0, 39) * 10, random.randint(0, 39) * 10]
+    game_state["food"] = [
+        random.randint(0, 39) * 10,
+        random.randint(0, 39) * 10,
+    ]
     game_state["score"] = 0
     game_state["game_over"] = False
     return jsonify(game_state)
