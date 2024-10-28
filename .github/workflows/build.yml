@@ -28,7 +28,7 @@ jobs:
         run: pip install -r requirements.txt
       - name: Run pytest
         run: pytest *.py
-  deploy-to-impass:
+  deploy-to-impaas:
     needs: unit-test
     runs-on: ubuntu-latest
     steps:
