@@ -100,7 +100,7 @@ def submit():
 
 
 def process_query(query: str):
-    if query.startswith("What"):
+    if query.startswith("What") or query.startswith("Which"):
         if "name" in query:
             return "cszs"
         if "largest" in query:
