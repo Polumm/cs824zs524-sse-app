@@ -120,14 +120,14 @@ def process_query(query: str):
             s_c = []
             for number in numbers:
                 if is_square_and_cube(number):
-                    s_c.append(number)
+                    s_c.append(str(number))
             return ", ".join(s_c)
         if "prime" in query:
             numbers = [int(i) for i in query.split(": ")[1][:-1].split(", ")]
             primes = []
             for number in numbers:
                 if is_prime(number):
-                    primes.append(number)
+                    primes.append(str(number))
             return ", ".join(primes)
         if "power" in query:
             numbers = query.split()
