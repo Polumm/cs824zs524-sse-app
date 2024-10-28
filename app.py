@@ -117,14 +117,18 @@ def process_query(query: str):
             return str(int(numbers[2]) * int(numbers[-1][:-1]))
         if "square" in query:
             numbers = [int(i) for i in query.split(": ")[1][:-1].split(", ")]
+            s_c = []
             for number in numbers:
                 if is_square_and_cube(number):
-                    return str(number)
+                    s_c.append(number)
+            return ", ".join(s_c)
         if "prime" in query:
             numbers = [int(i) for i in query.split(": ")[1][:-1].split(", ")]
+            primes = []
             for number in numbers:
                 if is_prime(number):
-                    return str(number)
+                    primes.append(number)
+            return ", ".join(primes)
         else:
             return "Unknown"
     else:
