@@ -7,6 +7,7 @@ from utils import are_opposite_directions
 query_dict = {
     "dinosaurs": "Dinosaurs ruled the Earth 200 million years ago",
     "asteroids": "Asteroids are rocky bodies orbiting the Sun",
+    "What is your name?": "cszs",
 }
 
 app = Flask(__name__)
