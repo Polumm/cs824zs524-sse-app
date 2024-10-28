@@ -109,8 +109,27 @@ def process_query(query: str):
         if "plus" in query:
             numbers = query.split()
             return str(int(numbers[2]) + int(numbers[-1][:-1]))
+        if "multiply" in query:
+            numbers = query.split()
+            return str(int(numbers[2]) * int(numbers[-1][:-1]))
+        if "square" in query:
+            numbers = [int(i) for i in query.split(": ")[1][:-1].split(", ")]
+            for number in numbers:
+                if is_square_and_cube(number):
+                    return str(number)
     else:
         return query_dict.get(query, "Unknown")
+
+
+def is_square_and_cube(a: int):
+    is_s = False
+    is_c = False
+    for i in range(a):
+        if i * i == a:
+            is_s = True
+        if i * i * i == a:
+            is_c = True
+    return is_s and is_c
 
 
 @app.route("/query")
