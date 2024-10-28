@@ -108,7 +108,12 @@ def process_query(query: str):
             return str(max(numbers))
         if "plus" in query:
             numbers = query.split()
-            return str(int(numbers[2]) + int(numbers[-1][:-1]))
+            if len(numbers) == 5:
+                return str(int(numbers[2]) + int(numbers[-1][:-1]))
+            else:
+                return str(
+                    int(numbers[2]) + int(numbers[4]) + int(numbers[-1][:-1])
+                )
         if "minus" in query:
             numbers = query.split()
             return str(int(numbers[2]) - int(numbers[-1][:-1]))
