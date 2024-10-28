@@ -129,6 +129,9 @@ def process_query(query: str):
                 if is_prime(number):
                     primes.append(number)
             return ", ".join(primes)
+        if "power" in query:
+            numbers = query.split()
+            return str(int(numbers[2]) ** int(numbers[-1][:-1]))
         else:
             return "Unknown"
     else:
