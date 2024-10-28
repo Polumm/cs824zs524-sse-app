@@ -7,7 +7,6 @@ from utils import are_opposite_directions
 query_dict = {
     "dinosaurs": "Dinosaurs ruled the Earth 200 million years ago",
     "asteroids": "Asteroids are rocky bodies orbiting the Sun",
-    "What is your name?": "cszs",
 }
 
 app = Flask(__name__)
@@ -100,8 +99,18 @@ def submit():
     return render_template("hello.html", name=input_name, age=input_age)
 
 
-def process_query(query):
-    return query_dict.get(query, "Unknown")
+def process_query(query: str):
+    if query.startswith("What"):
+        if "name" in query:
+            return "cszs"
+        if "largest" in query:
+            numbers = [int(i) for i in query.split(": ")[1][:-1].split(", ")]
+            return str(max(numbers))
+        if "plus" in query:
+            numbers = query.split()
+            return str(int(numbers[2]) + int(numbers[-1][:-1]))
+    else:
+        return query_dict.get(query, "Unknown")
 
 
 @app.route("/query")
