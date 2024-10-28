@@ -34,7 +34,7 @@ class TestProcessQuery(unittest.TestCase):
                 "Which of the following numbers is both a square and a cube\
                 : 4071, 4096, 1172, 64, 2500, 49, 2625?"
             ),
-            "4096",
+            "4096, 64",
         )
 
 
