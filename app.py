@@ -124,7 +124,7 @@ def process_query(query: str):
 def is_square_and_cube(a: int):
     is_s = False
     is_c = False
-    for i in range(a):
+    for i in range(1, a + 1):
         if i * i == a:
             is_s = True
         if i * i * i == a:
