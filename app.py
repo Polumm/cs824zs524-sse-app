@@ -120,6 +120,11 @@ def process_query(query: str):
             for number in numbers:
                 if is_square_and_cube(number):
                     return str(number)
+        if "prime" in query:
+            numbers = [int(i) for i in query.split(": ")[1][:-1].split(", ")]
+            for number in numbers:
+                if is_prime(number):
+                    return str(number)
         else:
             return "Unknown"
     else:
@@ -128,6 +133,15 @@ def process_query(query: str):
 
 def is_square_and_cube(a: int):
     return round(a**0.5) ** 2 == a and round(a ** (1 / 3)) ** 3 == a
+
+
+def is_prime(a: int):
+    if a < 2:
+        return False
+    for i in range(2, a):
+        if a % i == 0:
+            return False
+    return True
 
 
 @app.route("/query")
