@@ -109,7 +109,7 @@ def process_query(query: str):
         if "plus" in query:
             numbers = query.split()
             return str(int(numbers[2]) + int(numbers[-1][:-1]))
-        if "multiply" in query:
+        if "multiplied" in query:
             numbers = query.split()
             return str(int(numbers[2]) * int(numbers[-1][:-1]))
         if "square" in query:
