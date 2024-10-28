@@ -142,6 +142,8 @@ def is_square_and_cube(a: int):
 def is_prime(a: int):
     if a < 2:
         return False
+    if a == 2:
+        return True
     for i in range(2, a):
         if a % i == 0:
             return False
