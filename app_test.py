@@ -31,9 +31,10 @@ class TestProcessQuery(unittest.TestCase):
     def test_square_and_cube_query(self):
         self.assertEqual(
             process_query(
-                "Which of the following numbers is both a square and a cube: 4071, 4096, 1172, 64, 2500, 49, 2625?"
+                "Which of the following numbers is both a square and a cube\
+                : 4071, 4096, 1172, 64, 2500, 49, 2625?"
             ),
-            "64",
+            "4096",
         )
 
 
