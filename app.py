@@ -120,6 +120,8 @@ def process_query(query: str):
             for number in numbers:
                 if is_square_and_cube(number):
                     return str(number)
+        else:
+            return "Unknown"
     else:
         return query_dict.get(query, "Unknown")
 
