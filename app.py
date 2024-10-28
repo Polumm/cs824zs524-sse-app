@@ -3,6 +3,12 @@ import random
 
 from utils import are_opposite_directions
 
+
+query_dict = {
+    "dinosaurs": "Dinosaurs ruled the Earth 200 million years ago",
+    "asteroids": "Asteroids are rocky bodies orbiting the Sun",
+}
+
 app = Flask(__name__)
 
 # Snake game state management
@@ -94,12 +100,7 @@ def submit():
 
 
 def process_query(query):
-    if query == "dinosaurs":
-        return "Dinosaurs ruled the Earth 200 million years ago"
-    elif query == "asteroids":
-        return "Asteroids are rocky bodies orbiting the Sun"
-    else:
-        return "Unknown"
+    return query_dict.get(query, "Unknown")
 
 
 @app.route("/query")
