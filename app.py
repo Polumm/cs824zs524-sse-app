@@ -225,7 +225,7 @@ def repos():
             f"Error fetching repositories for user"
             f" {username}: {response.status_code}"
         )
-        return f"{status_code = }, {response.text}"
+        return f"{status_code =}, {response.text}"
 
 
 if __name__ == "__main__":
