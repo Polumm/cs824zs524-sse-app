@@ -164,11 +164,6 @@ def query_route():
         return "Query parameter missing", 400
 
 
-@app.route("/")
-def index():
-    return render_template("index.html")
-
-
 @app.route("/github_actions")
 def actions():
     return render_template("actions.html")
