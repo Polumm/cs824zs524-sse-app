@@ -179,15 +179,10 @@ def repos():
     username = request.form["username"]
     url = f"https://api.github.com/users/{username}/repos"
 
-    # Use GitHub token to increase rate limit
-    token = os.getenv(
-        "GITHUB_TOKEN"
-    )  # Make sure GITHUB_TOKEN is set in environment variables
+    token = os.getenv("GITHUB_TOKEN")
     headers = {"Authorization": f"token {token}"} if token else {}
 
-    # Request user's repository list
     response = requests.get(url, headers=headers)
-    status_code = response.status_code
 
     if response.status_code == 200:
         repos = response.json()
@@ -195,8 +190,8 @@ def repos():
 
         for repo in repos:
             # Fetch workflow runs
-            workflows_url = "https://api.github.com/"
-            f"repos/{username}/{repo['name']}/actions/runs"
+            workflows_url = "https://api.github.com/repos/"
+            f"{username}/{repo['name']}/actions/runs"
             workflows_response = requests.get(workflows_url, headers=headers)
             workflows = (
                 workflows_response.json().get("workflow_runs", [])
@@ -226,16 +221,15 @@ def repos():
                 }
             )
 
-        # Render template with repository data
         return render_template(
             "repos.html", repos=repo_data, username=username
         )
     else:
-        # print(
-        #     f"Error fetching repositories for user"
-        #     f" {username}: {response.status_code}"
-        # )
-        return f"{status_code=}, {response.text=}"
+        return f"Error fetching repositories: {response.status_code}"
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
 
 
 if __name__ == "__main__":
