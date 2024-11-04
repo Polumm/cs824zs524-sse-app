@@ -2,23 +2,137 @@
 <html>
 <head>
     <title>Repositories</title>
+    <style>
+        /* Basic Layout */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Container Styling */
+        .container {
+            width: 80%;
+            max-width: 800px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Header Styling */
+        h1 {
+            text-align: center;
+            color: #4a90e2;
+        }
+
+        /* Repository List Styling */
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background: #f9f9f9;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        li:hover {
+            background-color: #e8f4ff;
+        }
+
+        .repo-name {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .repo-info {
+            margin-top: 5px;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        /* Toggle Button Styling */
+        .toggle-btn {
+            background: none;
+            border: none;
+            color: #007bff;
+            font-size: 0.9em;
+            cursor: pointer;
+            margin-top: 10px;
+            display: inline-block;
+        }
+
+        .toggle-btn:hover {
+            text-decoration: underline;
+        }
+
+        /* Commit Details Styling */
+        .commit-details {
+            display: none;
+            padding: 10px;
+            background-color: #f1f1f1;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        /* Star Count Styling */
+        .star-count {
+            font-size: 0.9em;
+            color: #ffb400;
+        }
+    </style>
 </head>
 <body>
-    <h1>Repositories of {{ username }}</h1>
-    <ul>
-        {% for repo in repos %}
-        <li>
-            {{ repo.name }} - Last updated at {{ repo.updated_at }} - Stars: {{ repo.stars }}
-            {% if repo.latest_commit %}
-                <ul>
-                    <li>Commit Hash: {{ repo.latest_commit.sha }}</li>
-                    <li>Author: {{ repo.latest_commit.commit.author.name }}</li>
-                    <li>Date: {{ repo.latest_commit.commit.author.date }}</li>
-                    <li>Message: {{ repo.latest_commit.commit.message }}</li>
-                </ul>
-            {% endif %}
-        </li>
-        {% endfor %}
-    </ul>
+    <div class="container">
+        <h1>Repositories of {{ username }}</h1>
+        <ul>
+            {% for repo in repos %}
+            <li>
+                <span class="repo-name">{{ repo.name }}</span>
+                <span class="star-count">⭐ Stars: {{ repo.stars }}</span>
+                <div class="repo-info">
+                    Last updated at {{ repo.updated_at }}
+                </div>
+
+                {% if repo.latest_commit %}
+                    <button class="toggle-btn" onclick="toggleDetails(this)">Show Commit Details</button>
+                    <div class="commit-details">
+                        <ul>
+                            <li><strong>Commit Hash:</strong> {{ repo.latest_commit.sha }}</li>
+                            <li><strong>Author:</strong> {{ repo.latest_commit.commit.author.name }}</li>
+                            <li><strong>Date:</strong> {{ repo.latest_commit.commit.author.date }}</li>
+                            <li><strong>Message:</strong> {{ repo.latest_commit.commit.message }}</li>
+                        </ul>
+                    </div>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <script>
+        function toggleDetails(button) {
+            const details = button.nextElementSibling;
+            if (details.style.display === "none" || details.style.display === "") {
+                details.style.display = "block";
+                button.textContent = "Hide Commit Details";
+            } else {
+                details.style.display = "none";
+                button.textContent = "Show Commit Details";
+            }
+        }
+    </script>
 </body>
 </html>
