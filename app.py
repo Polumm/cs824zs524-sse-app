@@ -195,7 +195,8 @@ def repos():
 
         for repo in repos:
             # Fetch workflow runs
-            workflows_url = f"https://api.github.com/repos/{username}/{repo['name']}/actions/runs"
+            workflows_url = "https://api.github.com/"
+            f"repos/{username}/{repo['name']}/actions/runs"
             workflows_response = requests.get(workflows_url, headers=headers)
             workflows = (
                 workflows_response.json().get("workflow_runs", [])
