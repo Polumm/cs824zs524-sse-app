@@ -187,7 +187,9 @@ def repos():
 
     # Request user's repository list
     response = requests.get(url, headers=headers)
-    if response.status_code == 200:
+    status_code = response.status_code
+
+    if status_code == 200:
         repos = response.json()
         repo_data = []
 
@@ -223,7 +225,7 @@ def repos():
             f"Error fetching repositories for user"
             f" {username}: {response.status_code}"
         )
-        return "Error fetching repositories"
+        return f"{status_code = }, {response.text}"
 
 
 if __name__ == "__main__":
