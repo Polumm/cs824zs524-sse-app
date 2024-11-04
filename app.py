@@ -201,7 +201,8 @@ def repos():
                 latest_commit = commit_response.json()
             else:
                 print(
-                    f"Error fetching commit for {repo['full_name']}: {commit_response.status_code}"
+                    f"Error fetching commit for {repo['full_name']}:"
+                    f" {commit_response.status_code}"
                 )
 
             repo_data.append(
@@ -219,7 +220,8 @@ def repos():
         )
     else:
         print(
-            f"Error fetching repositories for user {username}: {response.status_code}"
+            f"Error fetching repositories for user"
+            f" {username}: {response.status_code}"
         )
         return "Error fetching repositories"
 
