@@ -54,7 +54,12 @@
 
         .repo-name {
             font-weight: bold;
-            color: #333;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .repo-name:hover {
+            text-decoration: underline;
         }
 
         .repo-info {
@@ -100,7 +105,7 @@
         <ul>
             {% for repo in repos %}
             <li>
-                <span class="repo-name">{{ repo.name }}</span>
+                <a href="{{ repo.html_url }}" target="_blank" class="repo-name">{{ repo.name }}</a>
                 <span class="star-count">⭐ Stars: {{ repo.stars }}</span>
                 <div class="repo-info">
                     Last updated at {{ repo.updated_at }}
