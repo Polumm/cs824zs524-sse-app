@@ -1,6 +1,7 @@
 import requests
 from flask import Flask, jsonify, render_template, request
 import random
+import os
 
 from utils import are_opposite_directions
 
@@ -177,17 +178,31 @@ def actions():
 def repos():
     username = request.form["username"]
     url = f"https://api.github.com/users/{username}/repos"
-    response = requests.get(url)
 
+    # Use GitHub token to increase rate limit
+    token = os.getenv(
+        "GITHUB_TOKEN"
+    )  # Make sure GITHUB_TOKEN is set in environment variables
+    headers = {"Authorization": f"token {token}"} if token else {}
+
+    # Request user's repository list
+    response = requests.get(url, headers=headers)
     if response.status_code == 200:
         repos = response.json()
         repo_data = []
+
         for repo in repos:
             commits_url = repo["commits_url"].replace("{/sha}", "/main")
-            commit_response = requests.get(commits_url)
+            commit_response = requests.get(commits_url, headers=headers)
             latest_commit = None
+
+            # Check commit request status
             if commit_response.status_code == 200:
                 latest_commit = commit_response.json()
+            else:
+                print(
+                    f"Error fetching commit for {repo['full_name']}: {commit_response.status_code}"
+                )
 
             repo_data.append(
                 {
@@ -197,12 +212,17 @@ def repos():
                     "latest_commit": latest_commit,
                 }
             )
+
+        # Render template with repository data
         return render_template(
             "repos.html", repos=repo_data, username=username
         )
     else:
+        print(
+            f"Error fetching repositories for user {username}: {response.status_code}"
+        )
         return "Error fetching repositories"
 
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5005)
+    app.run(debug=True)
