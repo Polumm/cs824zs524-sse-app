@@ -107,7 +107,9 @@ def process_query(query: str):
             if len(numbers) == 5:
                 return str(int(numbers[2]) + int(numbers[-1][:-1]))
             else:
-                return str(int(numbers[2]) + int(numbers[4]) + int(numbers[-1][:-1]))
+                return str(
+                    int(numbers[2]) + int(numbers[4]) + int(numbers[-1][:-1])
+                )
         if "minus" in query:
             numbers = query.split()
             return str(int(numbers[2]) - int(numbers[-1][:-1]))
@@ -190,7 +192,9 @@ def repos():
                     "latest_commit": latest_commit,
                 }
             )
-        return render_template("repos.html", repos=repo_data, username=username)
+        return render_template(
+            "repos.html", repos=repo_data, username=username
+        )
     else:
         return "Error fetching repositories"
 
