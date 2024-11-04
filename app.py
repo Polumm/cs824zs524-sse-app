@@ -174,11 +174,6 @@ def index():
     return render_template("index.html")
 
 
-@app.route("/")
-def index():
-    return render_template("index.html")
-
-
 @app.route("/repos", methods=["POST"])
 def repos():
     username = request.form["username"]
