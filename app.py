@@ -1,3 +1,4 @@
+import requests
 from flask import Flask, jsonify, render_template, request
 import random
 
@@ -54,11 +55,6 @@ def check_food():
         game_state["score"] += 10
 
 
-@app.route("/")
-def index():
-    return render_template("index.html")
-
-
 @app.route("/game-state", methods=["GET"])
 def get_game_state():
     return jsonify(game_state)
@@ -111,9 +107,7 @@ def process_query(query: str):
             if len(numbers) == 5:
                 return str(int(numbers[2]) + int(numbers[-1][:-1]))
             else:
-                return str(
-                    int(numbers[2]) + int(numbers[4]) + int(numbers[-1][:-1])
-                )
+                return str(int(numbers[2]) + int(numbers[4]) + int(numbers[-1][:-1]))
         if "minus" in query:
             numbers = query.split()
             return str(int(numbers[2]) - int(numbers[-1][:-1]))
@@ -167,5 +161,39 @@ def query_route():
         return "Query parameter missing", 400
 
 
+@app.route("/")
+def index():
+    return render_template("home.html")
+
+
+@app.route("/repos", methods=["POST"])
+def repos():
+    username = request.form["username"]
+    url = f"https://api.github.com/users/{username}/repos"
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        repos = response.json()
+        repo_data = []
+        for repo in repos:
+            commits_url = repo["commits_url"].replace("{/sha}", "/main")
+            commit_response = requests.get(commits_url)
+            latest_commit = None
+            if commit_response.status_code == 200:
+                latest_commit = commit_response.json()
+
+            repo_data.append(
+                {
+                    "name": repo["full_name"],
+                    "updated_at": repo["updated_at"],
+                    "stars": repo["stargazers_count"],
+                    "latest_commit": latest_commit,
+                }
+            )
+        return render_template("repos.html", repos=repo_data, username=username)
+    else:
+        return "Error fetching repositories"
+
+
 if __name__ == "__main__":
-    app.run(debug=True, port=5005)
+    app.run(debug=True)

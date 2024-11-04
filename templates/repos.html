@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+<head>
+    <title>Repositories</title>
+</head>
+<body>
+    <h1>Repositories of {{ username }}</h1>
+    <ul>
+        {% for repo in repos %}
+        <li>
+            {{ repo.name }} - Last updated at {{ repo.updated_at }} - Stars: {{ repo.stars }}
+            {% if repo.latest_commit %}
+                <ul>
+                    <li>Commit Hash: {{ repo.latest_commit.sha }}</li>
+                    <li>Author: {{ repo.latest_commit.commit.author.name }}</li>
+                    <li>Date: {{ repo.latest_commit.commit.author.date }}</li>
+                    <li>Message: {{ repo.latest_commit.commit.message }}</li>
+                </ul>
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
