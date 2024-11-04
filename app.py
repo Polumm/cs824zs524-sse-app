@@ -189,31 +189,39 @@ def repos():
     response = requests.get(url, headers=headers)
     status_code = response.status_code
 
-    if status_code == 200:
+    if response.status_code == 200:
         repos = response.json()
         repo_data = []
 
         for repo in repos:
-            commits_url = repo["commits_url"].replace("{/sha}", "/main")
-            commit_response = requests.get(commits_url, headers=headers)
-            latest_commit = None
+            # Fetch workflow runs
+            workflows_url = f"https://api.github.com/repos/{username}/{repo['name']}/actions/runs"
+            workflows_response = requests.get(workflows_url, headers=headers)
+            workflows = (
+                workflows_response.json().get("workflow_runs", [])
+                if workflows_response.status_code == 200
+                else []
+            )
 
-            # Check commit request status
-            if commit_response.status_code == 200:
-                latest_commit = commit_response.json()
-            else:
-                print(
-                    f"Error fetching commit for {repo['full_name']}:"
-                    f" {commit_response.status_code}"
-                )
+            # Limit to top 5 recent workflow runs
+            recent_workflows = [
+                {
+                    "name": workflow["name"],
+                    "status": workflow["status"],
+                    "conclusion": workflow["conclusion"],
+                    "created_at": workflow["created_at"],
+                    "html_url": workflow["html_url"],
+                }
+                for workflow in workflows[:5]
+            ]
 
             repo_data.append(
                 {
                     "name": repo["full_name"],
-                    "html_url": repo["html_url"],  # Add repository URL
+                    "html_url": repo["html_url"],
                     "updated_at": repo["updated_at"],
                     "stars": repo["stargazers_count"],
-                    "latest_commit": latest_commit,
+                    "recent_workflows": recent_workflows,
                 }
             )
 
