@@ -165,7 +165,12 @@ def query_route():
 
 @app.route("/")
 def index():
-    return render_template("home.html")
+    return render_template("index.html")
+
+
+@app.route("/github_actions")
+def actions():
+    return render_template("actions.html")
 
 
 @app.route("/repos", methods=["POST"])
