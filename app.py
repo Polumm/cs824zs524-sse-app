@@ -192,7 +192,9 @@ def repos():
                     "latest_commit": latest_commit,
                 }
             )
-        return render_template("repos.html", repos=repo_data, username=username)
+        return render_template(
+            "repos.html", repos=repo_data, username=username
+        )
     else:
         return "Error fetching repositories"
 
