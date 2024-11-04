@@ -221,11 +221,13 @@ def repos():
             "repos.html", repos=repo_data, username=username
         )
     else:
-        print(
-            f"Error fetching repositories for user"
-            f" {username}: {response.status_code}"
+        # print(
+        #     f"Error fetching repositories for user"
+        #     f" {username}: {response.status_code}"
+        # )
+        return (
+            f"{status_code =}, {response.text=}, {response.request.headers=}"
         )
-        return f"{status_code =}, {response.text}"
 
 
 if __name__ == "__main__":
