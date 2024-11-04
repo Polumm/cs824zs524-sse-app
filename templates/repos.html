@@ -44,7 +44,6 @@
             padding: 15px;
             border-radius: 5px;
             transition: background-color 0.3s ease;
-            cursor: pointer;
             position: relative;
         }
 
@@ -54,11 +53,12 @@
 
         .repo-name {
             font-weight: bold;
-            color: #007bff;
+            color: #333;
             text-decoration: none;
         }
 
         .repo-name:hover {
+            color: #4a90e2;
             text-decoration: underline;
         }
 
@@ -66,21 +66,6 @@
             margin-top: 5px;
             font-size: 0.9em;
             color: #666;
-        }
-
-        /* Toggle Button Styling */
-        .toggle-btn {
-            background: none;
-            border: none;
-            color: #007bff;
-            font-size: 0.9em;
-            cursor: pointer;
-            margin-top: 10px;
-            display: inline-block;
-        }
-
-        .toggle-btn:hover {
-            text-decoration: underline;
         }
 
         /* Commit Details Styling */
@@ -91,12 +76,6 @@
             border-radius: 5px;
             margin-top: 10px;
         }
-
-        /* Star Count Styling */
-        .star-count {
-            font-size: 0.9em;
-            color: #ffb400;
-        }
     </style>
 </head>
 <body>
@@ -105,7 +84,7 @@
         <ul>
             {% for repo in repos %}
             <li>
-                <a href="{{ repo.html_url }}" target="_blank" class="repo-name">{{ repo.name }}</a>
+                <a href="{{ repo.html_url }}" class="repo-name" target="_blank">{{ repo.name }}</a>
                 <span class="star-count">⭐ Stars: {{ repo.stars }}</span>
                 <div class="repo-info">
                     Last updated at {{ repo.updated_at }}

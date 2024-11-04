@@ -210,6 +210,7 @@ def repos():
             repo_data.append(
                 {
                     "name": repo["full_name"],
+                    "html_url": repo["html_url"],  # Add repository URL
                     "updated_at": repo["updated_at"],
                     "stars": repo["stargazers_count"],
                     "latest_commit": latest_commit,
