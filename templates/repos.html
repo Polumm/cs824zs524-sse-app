@@ -3,7 +3,6 @@
 <head>
     <title>Repositories</title>
     <style>
-        /* Basic Layout */
         body {
             font-family: Arial, sans-serif;
             background-color: #f5f5f5;
@@ -56,16 +55,37 @@
             text-decoration: underline;
         }
 
-        .workflows {
+        .section-title {
             margin-top: 10px;
             font-size: 0.9em;
             color: #333;
+            font-weight: bold;
         }
 
-        .workflow {
+        .workflow, .commit-details {
             margin-left: 15px;
             font-size: 0.85em;
             color: #555;
+        }
+
+        .toggle-btn {
+            background: none;
+            border: none;
+            color: #007bff;
+            font-size: 0.9em;
+            cursor: pointer;
+        }
+
+        .toggle-btn:hover {
+            text-decoration: underline;
+        }
+
+        .commit-details {
+            display: none;
+            padding: 10px;
+            background-color: #f1f1f1;
+            border-radius: 5px;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -79,19 +99,42 @@
                 <span>⭐ Stars: {{ repo.stars }}</span>
                 <div>Last updated at {{ repo.updated_at }}</div>
 
-                <div class="workflows">
-                    <strong>Recent Workflow Runs:</strong>
-                    <ul>
-                        {% for workflow in repo.recent_workflows %}
-                        <li class="workflow">
-                            <a href="{{ workflow.html_url }}" target="_blank">{{ workflow.name }}</a> - Status: {{ workflow.status }}, Conclusion: {{ workflow.conclusion }}, Created at: {{ workflow.created_at }}
-                        </li>
-                        {% endfor %}
-                    </ul>
-                </div>
+                {% if repo.latest_commit %}
+                    <button class="toggle-btn" onclick="toggleDetails(this)">Show Commit Details</button>
+                    <div class="commit-details">
+                        <ul>
+                            <li><strong>Commit Hash:</strong> {{ repo.latest_commit.sha }}</li>
+                            <li><strong>Author:</strong> {{ repo.latest_commit.commit.author.name }}</li>
+                            <li><strong>Date:</strong> {{ repo.latest_commit.commit.author.date }}</li>
+                            <li><strong>Message:</strong> {{ repo.latest_commit.commit.message }}</li>
+                        </ul>
+                    </div>
+                {% endif %}
+
+                <div class="section-title">Recent Workflow Runs:</div>
+                <ul>
+                    {% for workflow in repo.recent_workflows %}
+                    <li class="workflow">
+                        <a href="{{ workflow.html_url }}" target="_blank">{{ workflow.name }}</a> - Status: {{ workflow.status }}, Conclusion: {{ workflow.conclusion }}, Created at: {{ workflow.created_at }}
+                    </li>
+                    {% endfor %}
+                </ul>
             </li>
             {% endfor %}
         </ul>
     </div>
+
+    <script>
+        function toggleDetails(button) {
+            const details = button.nextElementSibling;
+            if (details.style.display === "none" || details.style.display === "") {
+                details.style.display = "block";
+                button.textContent = "Hide Commit Details";
+            } else {
+                details.style.display = "none";
+                button.textContent = "Show Commit Details";
+            }
+        }
+    </script>
 </body>
 </html>

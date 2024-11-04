@@ -174,6 +174,11 @@ def actions():
     return render_template("actions.html")
 
 
+@app.route("/")
+def index():
+    return render_template("index.html")
+
+
 @app.route("/repos", methods=["POST"])
 def repos():
     username = request.form["username"]
@@ -189,9 +194,16 @@ def repos():
         repo_data = []
 
         for repo in repos:
-            # Fetch workflow runs
-            workflows_url = "https://api.github.com/repos/"
-            f"{username}/{repo['name']}/actions/runs"
+            commits_url = repo["commits_url"].replace("{/sha}", "/main")
+            commit_response = requests.get(commits_url, headers=headers)
+            latest_commit = (
+                commit_response.json()
+                if commit_response.status_code == 200
+                else None
+            )
+
+            workflows_url = "https://api.github.com/repos"
+            f"/{username}/{repo['name']}/actions/runs"
             workflows_response = requests.get(workflows_url, headers=headers)
             workflows = (
                 workflows_response.json().get("workflow_runs", [])
@@ -199,7 +211,6 @@ def repos():
                 else []
             )
 
-            # Limit to top 5 recent workflow runs
             recent_workflows = [
                 {
                     "name": workflow["name"],
@@ -217,6 +228,7 @@ def repos():
                     "html_url": repo["html_url"],
                     "updated_at": repo["updated_at"],
                     "stars": repo["stargazers_count"],
+                    "latest_commit": latest_commit,
                     "recent_workflows": recent_workflows,
                 }
             )
@@ -226,10 +238,6 @@ def repos():
         )
     else:
         return f"Error fetching repositories: {response.status_code}"
-
-
-if __name__ == "__main__":
-    app.run(debug=True)
 
 
 if __name__ == "__main__":
