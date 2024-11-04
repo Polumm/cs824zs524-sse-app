@@ -62,7 +62,7 @@
             font-weight: bold;
         }
 
-        .workflow, .commit-details {
+        .issue, .commit-details {
             margin-left: 15px;
             font-size: 0.85em;
             color: #555;
@@ -111,11 +111,11 @@
                     </div>
                 {% endif %}
 
-                <div class="section-title">Recent Workflow Runs:</div>
+                <div class="section-title">Recent Open Issues:</div>
                 <ul>
-                    {% for workflow in repo.recent_workflows %}
-                    <li class="workflow">
-                        <a href="{{ workflow.html_url }}" target="_blank">{{ workflow.name }}</a> - Status: {{ workflow.status }}, Conclusion: {{ workflow.conclusion }}, Created at: {{ workflow.created_at }}
+                    {% for issue in repo.recent_issues %}
+                    <li class="issue">
+                        <a href="{{ issue.html_url }}" target="_blank">{{ issue.title }}</a> - Created at: {{ issue.created_at }}
                     </li>
                     {% endfor %}
                 </ul>

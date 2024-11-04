@@ -174,6 +174,11 @@ def index():
     return render_template("index.html")
 
 
+@app.route("/")
+def index():
+    return render_template("index.html")
+
+
 @app.route("/repos", methods=["POST"])
 def repos():
     username = request.form["username"]
@@ -189,6 +194,7 @@ def repos():
         repo_data = []
 
         for repo in repos:
+            # Fetch latest commit information
             commits_url = repo["commits_url"].replace("{/sha}", "/main")
             commit_response = requests.get(commits_url, headers=headers)
             latest_commit = (
@@ -197,24 +203,24 @@ def repos():
                 else None
             )
 
-            workflows_url = "https://api.github.com/repos"
-            f"/{username}/{repo['name']}/actions/runs"
-            workflows_response = requests.get(workflows_url, headers=headers)
-            workflows = (
-                workflows_response.json().get("workflow_runs", [])
-                if workflows_response.status_code == 200
+            # Fetch open issues information
+            issues_url = "https://api.github.com/repos/"
+            f"{username}/{repo['name']}/issues"
+            issues_response = requests.get(issues_url, headers=headers)
+            issues = (
+                issues_response.json()
+                if issues_response.status_code == 200
                 else []
             )
 
-            recent_workflows = [
+            # Limit to the 5 most recent issues
+            recent_issues = [
                 {
-                    "name": workflow["name"],
-                    "status": workflow["status"],
-                    "conclusion": workflow["conclusion"],
-                    "created_at": workflow["created_at"],
-                    "html_url": workflow["html_url"],
+                    "title": issue["title"],
+                    "created_at": issue["created_at"],
+                    "html_url": issue["html_url"],
                 }
-                for workflow in workflows[:5]
+                for issue in issues[:5]
             ]
 
             repo_data.append(
@@ -224,7 +230,7 @@ def repos():
                     "updated_at": repo["updated_at"],
                     "stars": repo["stargazers_count"],
                     "latest_commit": latest_commit,
-                    "recent_workflows": recent_workflows,
+                    "recent_issues": recent_issues,
                 }
             )
 
