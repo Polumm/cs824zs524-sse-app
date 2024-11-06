@@ -183,6 +183,7 @@ def repos():
     headers = {"Authorization": f"token {token}"} if token else {}
 
     response = requests.get(url, headers=headers)
+    debug_info = []  # Collect debug information
 
     if response.status_code == 200:
         repos = response.json()
@@ -199,14 +200,18 @@ def repos():
             )
 
             # Fetch open issues information
-            issues_url = "https://api.github.com/repos/"
-            f"{username}/{repo['name']}/issues"
+            issues_url = f"https://api.github.com/repos/{username}/{repo['name']}/issues"
             issues_response = requests.get(issues_url, headers=headers)
-            issues = (
-                issues_response.json()
-                if issues_response.status_code == 200
-                else []
-            )
+            if issues_response.status_code == 200:
+                issues = issues_response.json()
+                debug_info.append(
+                    f"Issues fetched for {repo['name']}: {len(issues)}"
+                )
+            else:
+                issues = []
+                debug_info.append(
+                    f"Failed to fetch issues for {repo['name']}: Status {issues_response.status_code}"
+                )
 
             # Limit to the 5 most recent issues
             recent_issues = [
@@ -229,11 +234,20 @@ def repos():
                 }
             )
 
+        # Render template with repo data and debug info
         return render_template(
-            "repos.html", repos=repo_data, username=username
+            "repos.html",
+            repos=repo_data,
+            username=username,
+            debug_info=debug_info,
         )
     else:
-        return f"Error fetching repositories: {response.status_code}"
+        debug_info.append(
+            f"Failed to fetch repositories: Status {response.status_code}"
+        )
+        return render_template(
+            "repos.html", repos=[], username=username, debug_info=debug_info
+        )
 
 
 if __name__ == "__main__":
