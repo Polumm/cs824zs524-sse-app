@@ -22,16 +22,6 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
-        .debug-info {
-            background-color: #fff8dc;
-            color: #333;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            width: 80%;
-            max-width: 800px;
-            margin-bottom: 20px;
-        }
 
         h1 {
             text-align: center;
@@ -101,16 +91,6 @@
     </style>
 </head>
 <body>
-    <!-- Debug information -->
-    <div class="debug-info">
-        <h3>Debug Information</h3>
-        <ul>
-            {% for info in debug_info %}
-            <li>{{ info }}</li>
-            {% endfor %}
-        </ul>
-    </div>
-
     <div class="container">
         <h1>Repositories of {{ username }}</h1>
         <ul>

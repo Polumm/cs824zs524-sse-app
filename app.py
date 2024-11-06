@@ -183,7 +183,6 @@ def repos():
     headers = {"Authorization": f"token {token}"} if token else {}
 
     response = requests.get(url, headers=headers)
-    debug_info = []  # Collect debug information
 
     if response.status_code == 200:
         repos = response.json()
@@ -199,25 +198,17 @@ def repos():
                 else None
             )
 
-            # Construct and debug issues URL
+            # Construct issues URL
             issues_url = (
                 f"https://api.github.com/repos/{username}/"
                 f"{repo['name']}/issues"
-            )
-            debug_info.append(
-                f"Fetching issues for {repo['name']} at {issues_url}"
             )
 
             issues_response = requests.get(issues_url, headers=headers)
             if issues_response.status_code == 200:
                 issues = issues_response.json()
-                debug_info.append(f"Issues for {repo['name']}: {len(issues)}")
             else:
                 issues = []
-                debug_info.append(
-                    f"Failed to fetch issues for {repo['name']}: "
-                    f"Status {issues_response.status_code}"
-                )
 
             # Limit to the 5 most recent issues
             recent_issues = [
@@ -244,15 +235,9 @@ def repos():
             "repos.html",
             repos=repo_data,
             username=username,
-            debug_info=debug_info,
         )
     else:
-        debug_info.append(
-            f"Failed to fetch repositories: " f"Status {response.status_code}"
-        )
-        return render_template(
-            "repos.html", repos=[], username=username, debug_info=debug_info
-        )
+        return render_template("repos.html", repos=[], username=username)
 
 
 if __name__ == "__main__":
