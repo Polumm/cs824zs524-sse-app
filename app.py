@@ -200,7 +200,8 @@ def repos():
             )
 
             # Fetch open issues information
-            issues_url = f"https://api.github.com/repos/{username}/{repo['name']}/issues"
+            issues_url = "https://api.github.com/repos/"
+            f"{username}/{repo['name']}/issues"
             issues_response = requests.get(issues_url, headers=headers)
             if issues_response.status_code == 200:
                 issues = issues_response.json()
@@ -210,7 +211,8 @@ def repos():
             else:
                 issues = []
                 debug_info.append(
-                    f"Failed to fetch issues for {repo['name']}: Status {issues_response.status_code}"
+                    "Failed to fetch issues for"
+                    f" {repo['name']}: Status {issues_response.status_code}"
                 )
 
             # Limit to the 5 most recent issues
