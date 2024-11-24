@@ -1,7 +1,15 @@
+import requests
 from flask import Flask, jsonify, render_template, request
 import random
+import os
 
 from utils import are_opposite_directions
+
+
+query_dict = {
+    "dinosaurs": "Dinosaurs ruled the Earth 200 million years ago",
+    "asteroids": "Asteroids are rocky bodies orbiting the Sun",
+}
 
 app = Flask(__name__)
 
@@ -48,11 +56,6 @@ def check_food():
         game_state["score"] += 10
 
 
-@app.route("/")
-def index():
-    return render_template("index.html")
-
-
 @app.route("/game-state", methods=["GET"])
 def get_game_state():
     return jsonify(game_state)
@@ -93,13 +96,63 @@ def submit():
     return render_template("hello.html", name=input_name, age=input_age)
 
 
-def process_query(query):
-    if query == "dinosaurs":
-        return "Dinosaurs ruled the Earth 200 million years ago"
-    elif query == "asteroids":
-        return "Asteroids are rocky bodies orbiting the Sun"
+def process_query(query: str):
+    if query.startswith("What") or query.startswith("Which"):
+        if "name" in query:
+            return "cszs"
+        if "largest" in query:
+            numbers = [int(i) for i in query.split(": ")[1][:-1].split(", ")]
+            return str(max(numbers))
+        if "plus" in query:
+            numbers = query.split()
+            if len(numbers) == 5:
+                return str(int(numbers[2]) + int(numbers[-1][:-1]))
+            else:
+                return str(
+                    int(numbers[2]) + int(numbers[4]) + int(numbers[-1][:-1])
+                )
+        if "minus" in query:
+            numbers = query.split()
+            return str(int(numbers[2]) - int(numbers[-1][:-1]))
+        if "multiplied" in query:
+            numbers = query.split()
+            return str(int(numbers[2]) * int(numbers[-1][:-1]))
+        if "square" in query:
+            numbers = [int(i) for i in query.split(": ")[1][:-1].split(", ")]
+            s_c = []
+            for number in numbers:
+                if is_square_and_cube(number):
+                    s_c.append(str(number))
+            return ", ".join(s_c)
+        if "prime" in query:
+            numbers = [int(i) for i in query.split(": ")[1][:-1].split(", ")]
+            primes = []
+            for number in numbers:
+                if is_prime(number):
+                    primes.append(str(number))
+            return ", ".join(primes)
+        if "power" in query:
+            numbers = query.split()
+            return str(int(numbers[2]) ** int(numbers[-1][:-1]))
+        else:
+            return "Unknown"
     else:
-        return "Unknown"
+        return query_dict.get(query, "Unknown")
+
+
+def is_square_and_cube(a: int):
+    return round(a**0.5) ** 2 == a and round(a ** (1 / 3)) ** 3 == a
+
+
+def is_prime(a: int):
+    if a < 2:
+        return False
+    if a == 2:
+        return True
+    for i in range(2, a):
+        if a % i == 0:
+            return False
+    return True
 
 
 @app.route("/query")
@@ -111,5 +164,81 @@ def query_route():
         return "Query parameter missing", 400
 
 
+@app.route("/github_actions")
+def actions():
+    return render_template("actions.html")
+
+
+@app.route("/")
+def index():
+    return render_template("index.html")
+
+
+@app.route("/repos", methods=["POST"])
+def repos():
+    username = request.form["username"]
+    url = f"https://api.github.com/users/{username}/repos"
+
+    token = os.getenv("GITHUB_TOKEN")
+    headers = {"Authorization": f"token {token}"} if token else {}
+
+    response = requests.get(url, headers=headers)
+
+    if response.status_code == 200:
+        repos = response.json()
+        repo_data = []
+
+        for repo in repos:
+            # Fetch latest commit information
+            commits_url = repo["commits_url"].replace("{/sha}", "/main")
+            commit_response = requests.get(commits_url, headers=headers)
+            latest_commit = (
+                commit_response.json()
+                if commit_response.status_code == 200
+                else None
+            )
+
+            # Construct issues URL
+            issues_url = (
+                f"https://api.github.com/repos/{username}/"
+                f"{repo['name']}/issues"
+            )
+
+            issues_response = requests.get(issues_url, headers=headers)
+            if issues_response.status_code == 200:
+                issues = issues_response.json()
+            else:
+                issues = []
+
+            # Limit to the 5 most recent issues
+            recent_issues = [
+                {
+                    "title": issue["title"],
+                    "created_at": issue["created_at"],
+                    "html_url": issue["html_url"],
+                }
+                for issue in issues[:5]
+            ]
+
+            repo_data.append(
+                {
+                    "name": repo["full_name"],
+                    "html_url": repo["html_url"],
+                    "updated_at": repo["updated_at"],
+                    "stars": repo["stargazers_count"],
+                    "latest_commit": latest_commit,
+                    "recent_issues": recent_issues,
+                }
+            )
+
+        return render_template(
+            "repos.html",
+            repos=repo_data,
+            username=username,
+        )
+    else:
+        return render_template("repos.html", repos=[], username=username)
+
+
 if __name__ == "__main__":
-    app.run(debug=True, port=5005)
+    app.run(debug=True)
